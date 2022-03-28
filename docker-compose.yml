@@ -22,7 +22,7 @@ services:
       - "3000:3000"
     environment:
       - DATABASE_USERNAME=user-app
-      - DATABASE_NAME=users-app
+      - DATABASE_NAME=userapp
       - DATABASE_HOST=db
       - DATABASE_PASSWORD=1234
     depends_on:

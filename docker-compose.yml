@@ -8,10 +8,10 @@ services:
       - "3306:3306"
     environment:
       - MYSQL_ROOT_HOST=%
-      - MYSQL_ROOT_PASSWORD=1234
-      - MYSQL_PASSWORD=1234
+      - MYSQL_ROOT_PASSWORD=P@sssw0d!
+      - MYSQL_PASSWORD=P@sssw0d!
       - MYSQL_USER=user-app
-      - MYSQL_DATABASE=users-app
+      - MYSQL_DATABASE=userapp
     volumes:
       - ./sql-dump:/docker-entrypoint-initdb.d
     command: '--default-authentication-plugin=mysql_native_password'
@@ -21,9 +21,9 @@ services:
     ports:
       - "3000:3000"
     environment:
-      - DATABASE_USERNAME=user-app
+      - DATABASE_USERNAME=userapp
       - DATABASE_NAME=userapp
       - DATABASE_HOST=db
-      - DATABASE_PASSWORD=1234
+      - DATABASE_PASSWORD=P@sssw0d!
     depends_on:
       - db

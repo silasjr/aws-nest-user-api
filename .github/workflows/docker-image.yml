@@ -13,6 +13,31 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v3
+
+    - name: Checkout code
+      uses: actions/checkout@v3
+
+    - name: Aws Credentials
+      uses: aws-actions/configure-aws-credentials@v1
+      with:
+        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        aws-region: us-east-1
+
+    - name: Auth AWS ECR
+      id: login-ecr
+      uses: aws-actions/amazon-ecr-login@v1
+
     - name: Build the Docker image
-      run: docker build . --file Dockerfile --tag silasjr/user-api:latest
+      env:
+        ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+        ECR_REPOSITORY: user-api
+        IMAGE_TAG: user-api
+      run: docker build . --file Dockerfile --tag $ECR_REGISTRY/$ECR_REPOSITORY:latest
+
+    - name: Push Docker image
+      env:
+        ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+        ECR_REPOSITORY: docker_nodejs_demo
+        IMAGE_TAG: nodejs_demo_image
+      run: docker push $ECR_REGISTRY/$ECR_REPOSITORY:latest

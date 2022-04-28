@@ -32,12 +32,10 @@ jobs:
       env:
         ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
         ECR_REPOSITORY: user-api
-        IMAGE_TAG: user-api
       run: docker build . --file Dockerfile --tag $ECR_REGISTRY/$ECR_REPOSITORY:latest
 
     - name: Push Docker image
       env:
         ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
-        ECR_REPOSITORY: docker_nodejs_demo
-        IMAGE_TAG: nodejs_demo_image
+        ECR_REPOSITORY: user-api
       run: docker push $ECR_REGISTRY/$ECR_REPOSITORY:latest

@@ -22,3 +22,9 @@ jobs:
         run: yarn install
       - name: run build
         run: yarn build
+
+  build-docker-image:
+    runs-on: ubuntu-latest
+    steps:
+      - name: build docker image
+        run: docker build . -t user-api:latest

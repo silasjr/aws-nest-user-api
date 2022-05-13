@@ -53,5 +53,8 @@ jobs:
             ./dist
           key: ${{ runner.os }}-app
 
+      - name: listFiles
+        run: ls -R
+
       - name: build docker image
         run: docker build -t user-api:latest .

@@ -17,35 +17,25 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version-file: '.nvmrc'
-
-      - name: Get yarn cache directory path
-        id: yarn-cache-dir-path
-        run: echo "::set-output name=dir::$(yarn cache dir)"
-
-      - uses: actions/cache@v3
-        id: yarn-cache # use this to check for `cache-hit` (`steps.yarn-cache.outputs.cache-hit != 'true'`)
-        with:
-          path: ${{ steps.yarn-cache-dir-path.outputs.dir }}
-          key: ${{ runner.os }}-yarn
-          restore-keys: |
-            ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
-            ${{ runner.os }}-yarn-
-            ${{ runner.os }}-yarn
-
-      - uses: actions/cache@v3
-        id: app-cache # use this to check for `cache-hit` (`steps.yarn-cache.outputs.cache-hit != 'true'`)
-        with:
-          path: ./
-          key: ${{ runner.os }}-app
-          restore-keys: |
-            ${{ runner.os }}-app-
-            ${{ runner.os }}-app
+          cache: 'yarn'
 
       - name: install dependency
         run: yarn install
 
       - name: run build
         run: yarn build
+
+      - uses: actions/cache@v3
+        id: app-cache # use this to check for `cache-hit` (`steps.yarn-cache.outputs.cache-hit != 'true'`)
+        with:
+          path: |
+            ./node_modules
+            yarn.lock
+            ./dist
+          key: ${{ runner.os }}-app
+          restore-keys: |
+            ${{ runner.os }}-app-
+            ${{ runner.os }}-app
 
   build-docker-image:
     runs-on: ubuntu-latest
@@ -54,20 +44,13 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
 
-      - name: Get yarn cache directory path
-        id: yarn-cache-dir-path
-        run: echo "::set-output name=dir::$(yarn cache dir)"
-
-      - name: Restore cache yarn
-        uses: actions/cache@v2
-        with:
-          path: ${{ steps.yarn-cache-dir-path.outputs.dir }}
-          key: ${{ runner.os }}-yarn
-
       - name: Restore cache app
         uses: actions/cache@v2
         with:
-          path: ./
+          path: |
+            ./node_modules
+            yarn.lock
+            ./dist
           key: ${{ runner.os }}-app
 
       - name: build docker image

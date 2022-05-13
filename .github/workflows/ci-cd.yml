@@ -31,6 +31,7 @@ jobs:
           path: |
             ./node_modules
             yarn.lock
+            Dockerfile
             ./dist
           key: ${{ runner.os }}-app
           restore-keys: |
@@ -47,6 +48,7 @@ jobs:
           path: |
             ./node_modules
             yarn.lock
+            Dockerfile
             ./dist
           key: ${{ runner.os }}-app
 

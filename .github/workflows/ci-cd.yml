@@ -82,3 +82,9 @@ jobs:
           ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
           ECR_REPOSITORY: user-api
         run: docker push $ECR_REGISTRY/$ECR_REPOSITORY:latest
+  deploy:
+    runs-on: ubuntu-latest
+    needs: [ 'docker-image' ]
+    steps:
+      - name: Deploy app
+        run: curl -X POST $DEPLOY_ARKAFE_API_WEBHOOK

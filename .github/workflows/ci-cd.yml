@@ -59,10 +59,7 @@ jobs:
 
       - name: build docker image
         run: docker build -t user-api:latest .
-  docker-push:
-    runs-on: ubuntu-latest
-    needs: ['docker-image']
-    steps:
+
       - name: Aws Credentials
         uses: aws-actions/configure-aws-credentials@v1
         with:
